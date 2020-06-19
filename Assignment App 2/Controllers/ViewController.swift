@@ -15,7 +15,7 @@ class ViewController: UIViewController {
 	var networkManager = NetworkManager()
 	var people = [PersonModel]()
 	var stopIndexPath = Int()
-
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
@@ -55,12 +55,11 @@ class ViewController: UIViewController {
 				self.tableView.refreshControl?.endRefreshing()
 			}
 		} else {
-			let updatedPeople = Array(people[0...9])
+	
 			people.removeAll()
-			people = updatedPeople
-			
+
 			networkManager.page = 1 //after deleting redundant people, start loading from the 1 page
-			
+			networkManager.fetchData()
 			tableView.reloadData()
 			stopIndexPath = 0 // this will let me to call willDisplayCell again
 			
@@ -70,8 +69,8 @@ class ViewController: UIViewController {
 		}
 		
 	}
-
-
+	
+	
 }
 extension ViewController: UITableViewDelegate {
 	
@@ -83,13 +82,13 @@ extension ViewController: UITableViewDelegate {
 		
 		if indexPath.row == people.count - 1 && indexPath.row != stopIndexPath {
 			stopIndexPath = indexPath.row  // prevents from Double-Calling this method
-
+			
 			networkManager.page += 1
 			networkManager.fetchData()
 		}
 	}
 	
-
+	
 }
 
 extension ViewController: UITableViewDataSource {
@@ -113,6 +112,7 @@ extension ViewController: NetworkManagerDelegate {
 		people.append(contentsOf: person)
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
+			
 		}
 		
 	}

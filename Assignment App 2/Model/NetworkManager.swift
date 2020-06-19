@@ -46,7 +46,7 @@ struct NetworkManager {
 	
 	func parseJSON(_ safeData: Data) -> [PersonModel]? {
 		let decoder = JSONDecoder()
-
+		
 		do {
 			let decodedData = try decoder.decode([PersonData].self, from: safeData)
 			var peopleArray = [PersonModel]()
