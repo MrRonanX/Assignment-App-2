@@ -56,11 +56,10 @@ class ViewController: UIViewController {
 			}
 		} else {
 	
-			people.removeAll()
+			//
 
-			networkManager.page = 1 //after deleting redundant people, start loading from the 1 page
+			networkManager.page = 1 //start loading from the 1 page
 			networkManager.fetchData()
-			tableView.reloadData()
 			stopIndexPath = 0 // this will let me to call willDisplayCell again
 			
 			DispatchQueue.main.async {
@@ -109,6 +108,10 @@ extension ViewController: UITableViewDataSource {
 
 extension ViewController: NetworkManagerDelegate {
 	func didUpdateData(_ networkManager: NetworkManager, person: [PersonModel]) {
+		if person.first?.name == people.first?.name {
+
+			people.removeAll()
+		}
 		people.append(contentsOf: person)
 		DispatchQueue.main.async {
 			self.tableView.reloadData()
